@@ -1,0 +1,31 @@
+#!/usr/bin/osascript
+
+on run argv
+  if argv is {} then
+    return "Pass at least one filename as an argument!"
+  end if
+
+  set pwd to system attribute "PWD"
+
+  tell application "Mail"
+    try
+      set composeMessage to first outgoing messages where visible is equal to true
+    on error
+      set composeMessage to make new outgoing message at beginning with properties {visible:true}
+    end try
+
+    tell composeMessage
+      repeat with fileName in argv
+        if not fileName starts with "/" then
+          set fileName to pwd & "/" & fileName
+        end if
+        tell content
+          make new attachment with properties {file name: fileName} at after the last paragraph
+        end tell
+      end repeat
+    end tell
+
+    activate
+
+  end tell
+end run
