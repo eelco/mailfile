@@ -9,7 +9,8 @@ on run argv
 
   tell application "Mail"
     try
-      set composeMessage to first outgoing messages where visible is equal to true
+      -- This only works for messages created by this script
+      set composeMessage to first outgoing message where visible is true
     on error
       set composeMessage to make new outgoing message at beginning with properties {visible:true}
     end try
